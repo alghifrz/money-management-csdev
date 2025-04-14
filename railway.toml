@@ -1,0 +1,22 @@
+[build]
+builder = "nixpacks"
+buildCommand = "composer install && npm install && npm run build"
+
+[deploy]
+startCommand = "php artisan config:clear && php artisan cache:clear && php artisan serve --host=0.0.0.0 --port=$PORT"
+restartPolicyType = "on_failure"
+
+[phases.setup]
+nixPkgs = ["php81", "php81Extensions.pgsql", "nodejs", "npm"]
+
+[phases.build]
+cmds = [
+    "npm install",
+    "npm run build",
+    "composer install",
+    "php artisan storage:link",
+    "php artisan migrate:fresh --seed"
+]
+
+[variables]
+GEMINI_API_KEY = "AIzaSyDTbPsIZYEd6E3u6UObjfSdye-LvpKHFm4"
